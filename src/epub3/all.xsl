@@ -17,9 +17,9 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:import href="inlines.xsl" />
-  <xsl:import href="blocks.xsl"/>
-  <xsl:import href="settlements.xsl" />
-  <xsl:import href="creatures.xsl" />
+  <xsl:import href="../html/inlines.xsl" />
+  <xsl:import href="../html/blocks.xsl"/>
+  <xsl:import href="../html/settlements.xsl" />
+  <xsl:import href="../html/creatures.xsl" />
 
 </xsl:stylesheet>

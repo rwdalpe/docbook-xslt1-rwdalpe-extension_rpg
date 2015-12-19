@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
-  Copyright (C) 2014 Robert Winslow Dalpe
+  Copyright (C) 2015 Robert Winslow Dalpe
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as published by
@@ -15,20 +15,14 @@
   You should have received a copy of the GNU Affero General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>
 -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:db="http://docbook.org/ns/docbook" xmlns:f="http://docbook.org/xslt/ns/extension"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:db="http://docbook.org/ns/docbook"
   xmlns:rpg="http://docbook.org/ns/docbook"
   xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:h="http://www.w3.org/1999/xhtml"
-  xmlns:et="http://docbook.org/ns/docbook/extensions/rpg/private"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  
-  exclude-result-prefixes="xsl db f rpg h xs et">
+  xmlns:h="http://www.w3.org/1999/xhtml"  
+  exclude-result-prefixes="xsl db rpg h">
 
   <xsl:template match="rpg:abilityscores">
-    <div>
-      <xsl:sequence select="f:html-attributes(.)"/>
-      <xsl:apply-templates/>
-    </div>
+    <xsl:call-template name="block.object"/>
   </xsl:template>
 </xsl:stylesheet>
