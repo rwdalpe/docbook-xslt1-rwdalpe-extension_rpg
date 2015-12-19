@@ -1,0 +1,41 @@
+project.version="0.0.1"
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  
+  dependencies {
+    classpath 'commons-io:commons-io:2.4'
+  }
+}
+
+configurations {
+  build
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  build 'net.sf.saxon:Saxon-HE:9.6.0-7'
+}
+
+task clean(type: Delete) {
+  delete outputDir
+}
+
+task zip(type: Zip) {
+  def f = file(outputDir)
+  if(!f.exists()) {
+    f.mkdirs()
+  }
+  
+  archiveName = "${projectName}_${project.version}.zip"
+  destinationDir = f
+  from src
+  include "**/*"
+}
+
+task dist(dependsOn: ['clean', 'zip']) << { }
