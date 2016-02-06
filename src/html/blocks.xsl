@@ -23,6 +23,13 @@
   exclude-result-prefixes="xsl db rpg h">
 
   <xsl:template match="rpg:abilityscores">
-    <xsl:call-template name="block.object"/>
+    <xsl:param name="separator" select="''"/>
+    <div>
+      <xsl:call-template name="common.html.attributes"/>
+      <xsl:call-template name="id.attribute"/>
+      <xsl:apply-templates>
+        <xsl:with-param name="separator" select="$separator"/>
+      </xsl:apply-templates>
+    </div>
   </xsl:template>
 </xsl:stylesheet>
