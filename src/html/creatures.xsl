@@ -91,7 +91,9 @@
 					<xsl:text> </xsl:text>
 				</xsl:for-each>
 				<xsl:for-each select="./rpg:class">
-					<xsl:apply-templates select="." mode="creature"/>
+					<xsl:apply-templates select="." mode="creature">
+						<xsl:with-param name="separator" select="'/'"/>
+					</xsl:apply-templates>
 				</xsl:for-each>
 			</div>
 			<div class="{local-name(.)}-alignmentSizeTypes">
@@ -425,10 +427,16 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates select="./rpg:sense" mode="creature"/>
+			<xsl:apply-templates select="./rpg:sense" mode="creature">
+				<xsl:with-param name="separator" select="', '"/>
+			</xsl:apply-templates>
 			<xsl:if test="./rpg:skill">
-				<xsl:text>; </xsl:text>
-				<xsl:apply-templates select="./rpg:skill" mode="creature"/>
+				<xsl:if test="count(./rpg:sense) > 0">
+					<xsl:text>; </xsl:text>
+				</xsl:if>
+				<xsl:apply-templates select="./rpg:skill" mode="creature">
+					<xsl:with-param name="separator" select="', '"/>
+				</xsl:apply-templates>
 			</xsl:if>
 		</span>
 	</xsl:template>
@@ -483,7 +491,9 @@
 			<xsl:apply-templates select="./rpg:creaturetype" mode="creature"/>
 			<xsl:if test="./rpg:creaturesubtype">
 				<xsl:text> (</xsl:text>
-				<xsl:apply-templates select="./rpg:creaturesubtype" mode="creature"/>
+				<xsl:apply-templates select="./rpg:creaturesubtype" mode="creature">
+					<xsl:with-param name="separator" select="', '"/>
+				</xsl:apply-templates>
 				<xsl:text>)</xsl:text>
 			</xsl:if>
 		</span>

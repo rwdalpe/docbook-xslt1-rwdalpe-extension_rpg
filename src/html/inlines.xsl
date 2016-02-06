@@ -420,7 +420,9 @@
 
 			<xsl:if test="./rpg:modifier">
 				<xsl:text>(</xsl:text>
-				<xsl:apply-templates select="./rpg:modifier" />
+				<xsl:apply-templates select="./rpg:modifier">
+					<xsl:with-param name="separator" select="', '"/>
+				</xsl:apply-templates>
 				<xsl:text>)</xsl:text>
 			</xsl:if>
 		</span>
@@ -429,7 +431,7 @@
 	<xsl:template match="rpg:modifier">
 		<xsl:param
 			name="separator"
-			select="', '" />
+			select="''" />
 
 		<xsl:variable
 			name="body"
@@ -490,7 +492,7 @@
 	<xsl:template match="rpg:aura">
 		<xsl:param
 			name="separator"
-			select="', '" />
+			select="''" />
 
 		<xsl:variable
 			name="details"
@@ -549,7 +551,7 @@
 
 	<xsl:template match="rpg:skill">
 		<xsl:param
-			name="separator" select="', '" />
+			name="separator" select="''" />
 
 		<xsl:variable
 			name="hasModifier"
@@ -605,7 +607,7 @@
 
 	<xsl:template match="rpg:sense">
 		<xsl:param
-			name="separator" select="', '" />
+			name="separator" select="''" />
 
 		<xsl:variable
 			name="hasRange"
@@ -632,7 +634,7 @@
 	<xsl:template match="rpg:creaturesubtype">
 		<xsl:param
 			name="separator"
-			select="', '" />
+			select="''" />
 
 		<xsl:call-template name="inline.charseq" />
 		<xsl:if test="following-sibling::*[1][self::rpg:creaturesubtype]">
@@ -675,7 +677,7 @@
 
 	<xsl:template match="rpg:class">
 		<xsl:param
-			name="separator" select="'/'" />
+			name="separator" select="''" />
 		<span>
 			<xsl:call-template name="common.html.attributes"/>
 			<xsl:call-template name="id.attribute"/>
@@ -760,7 +762,7 @@
 
 	<xsl:template match="rpg:abilityscore">
 		<xsl:param
-			name="separator" select="', '" />
+			name="separator" select="''" />
 
 		<xsl:variable
 			name="hasScore"
