@@ -29,49 +29,64 @@
 
 	exclude-result-prefixes="xsl db f rpg h xs t">
 
-  <xsl:template match="*" mode="creature">
-  	<xsl:apply-templates select="."/>
-  </xsl:template>
+	<xsl:template
+		match="*"
+		mode="creature">
+		<xsl:apply-templates select="." />
+	</xsl:template>
 
-	<xsl:template match="rpg:abbrevcreaturedesc" mode="creature">
+	<xsl:template
+		match="rpg:abbrevcreaturedesc"
+		mode="creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
-			<xsl:apply-templates mode="creature"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
+			<xsl:apply-templates mode="creature" />
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:abbrevcreaturedesc[@style = 'compact']" mode="creature">
+	<xsl:template
+		match="rpg:abbrevcreaturedesc[@style = 'compact']"
+		mode="creature">
 		<span class="{@style}">
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<xsl:apply-templates />
 		</span>
 	</xsl:template>
 
 	<xsl:template match="rpg:abbrevcreature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<div class="{local-name(.)}-header">
-				<xsl:apply-templates select="./rpg:creaturename|./rpg:challengerating" mode="creature" />
+				<xsl:apply-templates
+					select="./rpg:creaturename|./rpg:challengerating"
+					mode="creature" />
 			</div>
 			<xsl:apply-templates
-				select="./rpg:abbrevcreaturedesc[not(@style) or @style != 'compact']" mode="creature"/>
+				select="./rpg:abbrevcreaturedesc[not(@style) or @style != 'compact']"
+				mode="creature" />
 
 			<xsl:variable
 				name="compactDesc"
-				select="./rpg:abbrevcreaturedesc[@style = 'compact']"/>
+				select="./rpg:abbrevcreaturedesc[@style = 'compact']" />
 			<xsl:choose>
 				<xsl:when test="$compactDesc">
 					<div class="compactHPDesc-container">
-						<xsl:apply-templates select="./rpg:hp" mode="creature"/>
+						<xsl:apply-templates
+							select="./rpg:hp"
+							mode="creature" />
 						<xsl:text> </xsl:text>
-						<xsl:apply-templates select="./rpg:abbrevcreaturedesc[@style = 'compact']" mode="creature"/>
+						<xsl:apply-templates
+							select="./rpg:abbrevcreaturedesc[@style = 'compact']"
+							mode="creature" />
 					</div>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:apply-templates select="./rpg:hp" mode="creature"/>
+					<xsl:apply-templates
+						select="./rpg:hp"
+						mode="creature" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</div>
@@ -79,15 +94,21 @@
 
 	<xsl:template match="rpg:creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<div class="{local-name(.)}-header">
-				<xsl:apply-templates select="./rpg:creaturename|./rpg:challengerating" mode="creature"/>
+				<xsl:apply-templates
+					select="./rpg:creaturename|./rpg:challengerating"
+					mode="creature" />
 			</div>
-			<xsl:apply-templates select="./rpg:xpreward" mode="creature"/>
+			<xsl:apply-templates
+				select="./rpg:xpreward"
+				mode="creature" />
 			<div class="{local-name(.)}-raceClassLevels">
 				<xsl:for-each select="./rpg:race">
-					<xsl:apply-templates select="." mode="creature"/>
+					<xsl:apply-templates
+						select="."
+						mode="creature" />
 					<xsl:text> </xsl:text>
 				</xsl:for-each>
 				<xsl:for-each select="./rpg:class">
@@ -98,62 +119,84 @@
 			</div>
 			<div class="{local-name(.)}-alignmentSizeTypes">
 				<xsl:for-each select="./rpg:alignment | ./rpg:size | ./rpg:creaturetypes">
-					<xsl:apply-templates select="." mode="creature"/>
+					<xsl:apply-templates
+						select="."
+						mode="creature" />
 					<xsl:text> </xsl:text>
 				</xsl:for-each>
 			</div>
 			<div class="{local-name(.)}-initSenses">
-				<xsl:apply-templates select="./rpg:initiative" mode="creature"/>
+				<xsl:apply-templates
+					select="./rpg:initiative"
+					mode="creature" />
 				<xsl:text>; </xsl:text>
-				<xsl:apply-templates select="./rpg:senses" mode="creature"/>
+				<xsl:apply-templates
+					select="./rpg:senses"
+					mode="creature" />
 			</div>
-			<div class="{local-name(.)}-auras">
-				<span class="aura-title">
-					<xsl:call-template name="gentext">
-						<xsl:with-param
-							name="key"
-							select="'aura'" />
-					</xsl:call-template>
-				</span>
-				<xsl:text> </xsl:text>
-				<xsl:apply-templates select="./rpg:aura" mode="creature"/>
-			</div>
-			<xsl:apply-templates select="./rpg:defenses | ./rpg:offenses" mode="creature"/>
+			<xsl:if test="./rpg:aura">
+				<div class="{local-name(.)}-auras">
+					<span class="aura-title">
+						<xsl:call-template name="gentext">
+							<xsl:with-param
+								name="key"
+								select="'aura'" />
+						</xsl:call-template>
+					</span>
+					<xsl:text> </xsl:text>
+					<xsl:apply-templates
+						select="./rpg:aura"
+						mode="creature" />
+				</div>
+			</xsl:if>
+			<xsl:apply-templates
+				select="./rpg:defenses | ./rpg:offenses"
+				mode="creature" />
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:defensiveabilities/rpg:resistance" mode="creature">
-		<xsl:apply-templates select="."/>
+	<xsl:template
+		match="rpg:defensiveabilities/rpg:resistance"
+		mode="creature">
+		<xsl:apply-templates select="." />
 		<xsl:if test="following-sibling::*[self::rpg:resistance]">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="rpg:defensiveabilities/rpg:immunity" mode="creature">
-		<xsl:apply-templates select="."/>
+	<xsl:template
+		match="rpg:defensiveabilities/rpg:immunity"
+		mode="creature">
+		<xsl:apply-templates select="." />
 		<xsl:if test="following-sibling::*[self::rpg:immunity]">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="rpg:defensiveabilities/rpg:dr" mode="creature">
-		<xsl:apply-templates select="."/>
+	<xsl:template
+		match="rpg:defensiveabilities/rpg:dr"
+		mode="creature">
+		<xsl:apply-templates select="." />
 		<xsl:if test="following-sibling::*[self::rpg:dr]">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="rpg:defensiveabilities/rpg:defensiveability" mode="creature">
-		<xsl:apply-templates select="."/>
+	<xsl:template
+		match="rpg:defensiveabilities/rpg:defensiveability"
+		mode="creature">
+		<xsl:apply-templates select="." />
 		<xsl:if test="following-sibling::*[self::rpg:defensiveability]">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="rpg:defensiveabilities" mode="creature">
+	<xsl:template
+		match="rpg:defensiveabilities"
+		mode="creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<span class="{local-name(.)}-container">
 				<span class="{local-name(.)}-title">
 					<xsl:call-template name="gentext">
@@ -163,7 +206,9 @@
 					</xsl:call-template>
 				</span>
 				<xsl:text> </xsl:text>
-				<xsl:apply-templates select="./rpg:defensiveability" mode="creature"/>
+				<xsl:apply-templates
+					select="./rpg:defensiveability"
+					mode="creature" />
 			</span>
 			<xsl:if test="./rpg:dr">
 				<xsl:if test="./rpg:dr[1]/preceding-sibling::*">
@@ -178,7 +223,9 @@
 						</xsl:call-template>
 					</span>
 					<xsl:text> </xsl:text>
-					<xsl:apply-templates select="./rpg:dr" mode="creature"/>
+					<xsl:apply-templates
+						select="./rpg:dr"
+						mode="creature" />
 				</span>
 			</xsl:if>
 			<xsl:if test="./rpg:immunity">
@@ -194,7 +241,9 @@
 						</xsl:call-template>
 					</span>
 					<xsl:text> </xsl:text>
-					<xsl:apply-templates select="./rpg:immunity" mode="creature"/>
+					<xsl:apply-templates
+						select="./rpg:immunity"
+						mode="creature" />
 				</span>
 			</xsl:if>
 			<xsl:if test="./rpg:resistance">
@@ -210,37 +259,47 @@
 						</xsl:call-template>
 					</span>
 					<xsl:text> </xsl:text>
-					<xsl:apply-templates select="./rpg:resistance" mode="creature"/>
+					<xsl:apply-templates
+						select="./rpg:resistance"
+						mode="creature" />
 				</span>
 			</xsl:if>
 			<xsl:if test="./rpg:sr">
 				<xsl:if test="./rpg:sr[1]/preceding-sibling::*">
 					<xsl:text>; </xsl:text>
 				</xsl:if>
-				<xsl:apply-templates select="./rpg:sr" mode="creature"/>
+				<xsl:apply-templates
+					select="./rpg:sr"
+					mode="creature" />
 			</xsl:if>
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:creaturesaves/rpg:save" mode="creature">
-		<xsl:apply-templates select="."/>
+	<xsl:template
+		match="rpg:creaturesaves/rpg:save"
+		mode="creature">
+		<xsl:apply-templates select="." />
 		<xsl:if test="following-sibling::*[self::rpg:save]">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="rpg:creaturesaves" mode="creature">
+	<xsl:template
+		match="rpg:creaturesaves"
+		mode="creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
-			<xsl:apply-templates mode="creature"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
+			<xsl:apply-templates mode="creature" />
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:creature/rpg:defenses/rpg:hp | rpg:abbrevcreature/rpg:hp" mode="creature">
+	<xsl:template
+		match="rpg:creature/rpg:defenses/rpg:hp | rpg:abbrevcreature/rpg:hp"
+		mode="creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
 					<xsl:with-param
@@ -249,7 +308,9 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates select="./rpg:hpval" mode="creature"/>
+			<xsl:apply-templates
+				select="./rpg:hpval"
+				mode="creature" />
 			<xsl:if test="@hdtotal or @expanded">
 				<xsl:text> (</xsl:text>
 				<xsl:if test="@hdtotal">
@@ -275,23 +336,29 @@
 					<xsl:if test="position() != 1">
 						<xsl:text>, </xsl:text>
 					</xsl:if>
-					<xsl:apply-templates select="." mode="creature"/>
+					<xsl:apply-templates
+						select="."
+						mode="creature" />
 				</xsl:for-each>
 			</xsl:if>
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:creature/rpg:defenses/rpg:weaknesses/rpg:weakness" mode="creature">
-		<xsl:apply-templates select="."/>
+	<xsl:template
+		match="rpg:creature/rpg:defenses/rpg:weaknesses/rpg:weakness"
+		mode="creature">
+		<xsl:apply-templates select="." />
 		<xsl:if test="following-sibling::rpg:weakness">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="rpg:creature/rpg:defenses/rpg:weaknesses" mode="creature">
+	<xsl:template
+		match="rpg:creature/rpg:defenses/rpg:weaknesses"
+		mode="creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
 					<xsl:with-param
@@ -301,15 +368,17 @@
 			</span>
 			<xsl:text> </xsl:text>
 			<span class="{local-name(.)}-body">
-				<xsl:apply-templates mode="creature"/>
+				<xsl:apply-templates mode="creature" />
 			</span>
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:defenses" mode="creature">
+	<xsl:template
+		match="rpg:defenses"
+		mode="creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
 					<xsl:with-param
@@ -318,20 +387,24 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates mode="creature"/>
+			<xsl:apply-templates mode="creature" />
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:defenses/rpg:ac" mode="creature">
+	<xsl:template
+		match="rpg:defenses/rpg:ac"
+		mode="creature">
 		<div class="{local-name(.)}-container">
-			<xsl:apply-templates select="."/>
+			<xsl:apply-templates select="." />
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:offenses/rpg:meleeattacks | rpg:offenses/rpg:rangedattacks" mode="creature">
+	<xsl:template
+		match="rpg:offenses/rpg:meleeattacks | rpg:offenses/rpg:rangedattacks"
+		mode="creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
 					<xsl:with-param
@@ -340,21 +413,25 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates mode="creature"/>
+			<xsl:apply-templates mode="creature" />
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:offenses/rpg:creaturespeeds/rpg:speed" mode="creature">
-		<xsl:apply-templates select="."/>
+	<xsl:template
+		match="rpg:offenses/rpg:creaturespeeds/rpg:speed"
+		mode="creature">
+		<xsl:apply-templates select="." />
 		<xsl:if test="following-sibling::rpg:speed">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="rpg:offenses/rpg:creaturespeeds" mode="creature">
+	<xsl:template
+		match="rpg:offenses/rpg:creaturespeeds"
+		mode="creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
 					<xsl:with-param
@@ -363,12 +440,13 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates mode="creature"/>
+			<xsl:apply-templates mode="creature" />
 		</div>
 	</xsl:template>
 
 	<xsl:template
-		match="rpg:creaturedimensions/rpg:space | rpg:creaturedimensions/rpg:reach" mode="creature">
+		match="rpg:creaturedimensions/rpg:space | rpg:creaturedimensions/rpg:reach"
+		mode="creature">
 		<span class="{local-name(.)}-container">
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
@@ -378,17 +456,19 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates select="."/>
+			<xsl:apply-templates select="." />
 			<xsl:if test="following-sibling::rpg:*">
 				<xsl:text>; </xsl:text>
 			</xsl:if>
 		</span>
 	</xsl:template>
 
-	<xsl:template match="rpg:offenses/rpg:creaturedimensions" mode="creature">
+	<xsl:template
+		match="rpg:offenses/rpg:creaturedimensions"
+		mode="creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
 					<xsl:with-param
@@ -397,14 +477,16 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates mode="creature"/>
+			<xsl:apply-templates mode="creature" />
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:offenses" mode="creature">
+	<xsl:template
+		match="rpg:offenses"
+		mode="creature">
 		<div>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
 					<xsl:with-param
@@ -413,11 +495,13 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates mode="creature"/>
+			<xsl:apply-templates mode="creature" />
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:senses" mode="creature">
+	<xsl:template
+		match="rpg:senses"
+		mode="creature">
 		<span class="{local-name(.)}-container">
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
@@ -442,7 +526,8 @@
 	</xsl:template>
 
 	<xsl:template
-		match="rpg:creature/rpg:challengerating | rpg:abbrevcreature/rpg:challengerating" mode="creature">
+		match="rpg:creature/rpg:challengerating | rpg:abbrevcreature/rpg:challengerating"
+		mode="creature">
 		<span class="{local-name(.)}-container">
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
@@ -452,11 +537,13 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates select="."/>
+			<xsl:apply-templates select="." />
 		</span>
 	</xsl:template>
 
-	<xsl:template match="rpg:creature/rpg:xpreward" mode="creature">
+	<xsl:template
+		match="rpg:creature/rpg:xpreward"
+		mode="creature">
 		<div class="{local-name(.)}-container">
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
@@ -466,11 +553,13 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates select="."/>
+			<xsl:apply-templates select="." />
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rpg:creature/rpg:initiative" mode="creature">
+	<xsl:template
+		match="rpg:creature/rpg:initiative"
+		mode="creature">
 		<span class="{local-name(.)}-container">
 			<span class="{local-name(.)}-title">
 				<xsl:call-template name="gentext">
@@ -480,15 +569,19 @@
 				</xsl:call-template>
 			</span>
 			<xsl:text> </xsl:text>
-			<xsl:apply-templates select="."/>
+			<xsl:apply-templates select="." />
 		</span>
 	</xsl:template>
 
-	<xsl:template match="rpg:creaturetypes" mode="creature">
+	<xsl:template
+		match="rpg:creaturetypes"
+		mode="creature">
 		<span>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
-			<xsl:apply-templates select="./rpg:creaturetype" mode="creature"/>
+			<xsl:call-template name="common.html.attributes" />
+			<xsl:call-template name="id.attribute" />
+			<xsl:apply-templates
+				select="./rpg:creaturetype"
+				mode="creature" />
 			<xsl:if test="./rpg:creaturesubtype">
 				<xsl:text> (</xsl:text>
 				<xsl:apply-templates select="./rpg:creaturesubtype" mode="creature">
