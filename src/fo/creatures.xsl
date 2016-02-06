@@ -578,15 +578,9 @@
 				mode="creature" />
 			<xsl:if test="./rpg:creaturesubtype">
 				<xsl:text> (</xsl:text>
-<<<<<<< HEAD
 				<xsl:apply-templates select="./rpg:creaturesubtype" mode="creature">
 					<xsl:with-param name="separator" select="', '"/>
 				</xsl:apply-templates>
-=======
-				<xsl:apply-templates
-					select="./rpg:creaturesubtype"
-					mode="creature" />
->>>>>>> origin/master
 				<xsl:text>)</xsl:text>
 			</xsl:if>
 		</fo:wrapper>
