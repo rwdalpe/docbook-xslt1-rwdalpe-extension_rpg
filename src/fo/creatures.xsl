@@ -585,4 +585,30 @@
 			</xsl:if>
 		</fo:wrapper>
 	</xsl:template>
+
+	<xsl:template
+			match="rpg:offenses/rpg:specialattacks"
+			mode="creature">
+		<fo:block>
+			<fo:wrapper>
+				<xsl:call-template name="gentext">
+					<xsl:with-param
+							name="key"
+							select="local-name(.)" />
+				</xsl:call-template>
+			</fo:wrapper>
+			<xsl:text> </xsl:text>
+			<xsl:apply-templates mode="creature" />
+		</fo:block>
+	</xsl:template>
+
+	<xsl:template
+			match="rpg:offenses/rpg:specialattacks/rpg:specialattack"
+			mode="creature">
+		<xsl:apply-templates select="." />
+		<xsl:if test="following-sibling::rpg:specialattack">
+			<xsl:text>, </xsl:text>
+		</xsl:if>
+	</xsl:template>
+
 </xsl:stylesheet>

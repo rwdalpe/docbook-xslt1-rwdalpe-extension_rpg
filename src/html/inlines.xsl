@@ -77,6 +77,34 @@
 		</xsl:if>
 	</xsl:template>
 
+	<xsl:template match="rpg:specialattack">
+		<span>
+			<xsl:call-template name="common.html.attributes"/>
+			<xsl:call-template name="id.attribute"/>
+			<xsl:variable name="forXlink">
+				<xsl:for-each select="./node()[not(self::rpg:qualifier)]">
+					<xsl:choose>
+						<xsl:when test="self::text()">
+							<xsl:copy-of select="." />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="inline.charseq" />
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:for-each>
+			</xsl:variable>
+			<xsl:call-template name="simple.xlink">
+				<xsl:with-param
+						name="content"
+						select="$forXlink" />
+			</xsl:call-template>
+			<xsl:if test="./rpg:qualifier">
+				<xsl:text> </xsl:text>
+				<xsl:apply-templates select="./rpg:qualifier" />
+			</xsl:if>
+		</span>
+	</xsl:template>
+
 	<xsl:template match="rpg:attackbonus">
 		<span>
 			<xsl:call-template name="common.html.attributes"/>
