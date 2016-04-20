@@ -7,7 +7,7 @@ handle the new elements added by [docbook-5.0-extension_rwdalpe-rpg][1].
 
 ## Licensing
 
-Copyright (C) 2015 Robert Winslow Dalpe
+Copyright (C) 2016 Robert Winslow Dalpe
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
