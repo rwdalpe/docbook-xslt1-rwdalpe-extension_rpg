@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
-  Copyright (C) 2015 Robert Winslow Dalpe
+  Copyright (C) 2016 Robert Winslow Dalpe
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as published by
@@ -16,20 +16,29 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:db="http://docbook.org/ns/docbook"
-  xmlns:rpg="http://docbook.org/ns/docbook"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:h="http://www.w3.org/1999/xhtml"  
-  exclude-result-prefixes="xsl db rpg h">
+		xmlns:db="http://docbook.org/ns/docbook"
+		xmlns:rpg="http://docbook.org/ns/docbook"
+		xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://www.w3.org/1999/xhtml"
+		exclude-result-prefixes="xsl db rpg h">
 
-  <xsl:template match="rpg:abilityscores">
-    <xsl:param name="separator" select="''"/>
-    <div>
-      <xsl:call-template name="common.html.attributes"/>
-      <xsl:call-template name="id.attribute"/>
-      <xsl:apply-templates>
-        <xsl:with-param name="separator" select="$separator"/>
-      </xsl:apply-templates>
-    </div>
-  </xsl:template>
+	<xsl:template match="rpg:abilityscores">
+		<xsl:param name="separator" select="''"/>
+		<div>
+			<xsl:call-template name="common.html.attributes"/>
+			<xsl:call-template name="id.attribute"/>
+			<xsl:apply-templates>
+				<xsl:with-param name="separator" select="$separator"/>
+			</xsl:apply-templates>
+		</div>
+	</xsl:template>
+
+	<xsl:template match="rpg:statblocksection">
+		<div>
+			<xsl:call-template name="common.html.attributes"/>
+			<xsl:call-template name="id.attribute"/>
+			<xsl:call-template name="statblocksection.titlepage"/>
+			<xsl:apply-templates/>
+		</div>
+	</xsl:template>
 </xsl:stylesheet>
