@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
-  Copyright (C) 2015 Robert Winslow Dalpe
+  Copyright (C) 2016 Robert Winslow Dalpe
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as published by
@@ -17,9 +17,10 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:import href="../html/inlines.xsl" />
-  <xsl:import href="../html/blocks.xsl"/>
-  <xsl:import href="../html/settlements.xsl" />
-  <xsl:import href="../html/creatures.xsl" />
+	<xsl:import href="../html/common.xsl"/>
+	<xsl:import href="../html/inlines.xsl"/>
+	<xsl:import href="../html/blocks.xsl"/>
+	<xsl:import href="../html/settlements.xsl"/>
+	<xsl:import href="../html/creatures.xsl"/>
 
 </xsl:stylesheet>
