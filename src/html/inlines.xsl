@@ -27,13 +27,13 @@
 
 		exclude-result-prefixes="xsl db rpg h">
 
-	<xsl:template
-			match="rpg:alignment|rpg:location|rpg:settlementtype
-				| rpg:government|rpg:settlementquality|rpg:settlementdisadvantage
-				| rpg:creaturename | rpg:challengerating | rpg:xpreward
-				| rpg:race | rpg:size | rpg:creaturetype | rpg:rating | rpg:hpval
-				| rpg:defensiveability | rpg:immunity | rpg:weakness | rpg:damage | rpg:hiteffect
-				| rpg:attackname">
+	<xsl:template match="rpg:alignment| rpg:location| rpg:settlementtype
+		| rpg:government|rpg:settlementquality|rpg:settlementdisadvantage
+		| rpg:creaturename | rpg:challengerating | rpg:xpreward
+		| rpg:race | rpg:size | rpg:creaturetype | rpg:rating | rpg:hpval
+		| rpg:defensiveability | rpg:immunity | rpg:weakness | rpg:damage | rpg:hiteffect
+		| rpg:attackname | rpg:sla | rpg:spell | rpg:feat">
+
 		<xsl:call-template name="inline.charseq"/>
 	</xsl:template>
 
@@ -56,16 +56,7 @@
 
 	<xsl:template match="rpg:space | rpg:reach">
 		<xsl:variable name="forXlink">
-			<xsl:for-each select="./node()[not(self::rpg:qualifier)]">
-				<xsl:choose>
-					<xsl:when test="self::text()">
-						<xsl:copy-of select="."/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:call-template name="inline.charseq"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:for-each>
+			<xsl:call-template name="trpg:no-qualifier-xlink-content"/>
 		</xsl:variable>
 		<xsl:call-template name="simple.xlink">
 			<xsl:with-param
@@ -83,16 +74,7 @@
 			<xsl:call-template name="common.html.attributes"/>
 			<xsl:call-template name="id.attribute"/>
 			<xsl:variable name="forXlink">
-				<xsl:for-each select="./node()[not(self::rpg:qualifier)]">
-					<xsl:choose>
-						<xsl:when test="self::text()">
-							<xsl:copy-of select="."/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="inline.charseq"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:for-each>
+				<xsl:call-template name="trpg:no-qualifier-xlink-content"/>
 			</xsl:variable>
 			<xsl:call-template name="simple.xlink">
 				<xsl:with-param
@@ -103,6 +85,27 @@
 				<xsl:text> </xsl:text>
 				<xsl:apply-templates select="./rpg:qualifier"/>
 			</xsl:if>
+		</span>
+	</xsl:template>
+
+	<xsl:template match="rpg:bab | rpg:cmb | rpg:cmd">
+		<span>
+			<xsl:call-template name="common.html.attributes"/>
+			<xsl:call-template name="id.attribute"/>
+			<span class="{local-name(.)}-modifier">
+				<xsl:variable
+						name="mod"
+						select="@modifier"/>
+				<xsl:call-template name="simple.xlink">
+					<xsl:with-param
+							name="content"
+							select="string($mod)"/>
+				</xsl:call-template>
+			</span>
+			<xsl:for-each select="./rpg:modifierbreakdown | ./rpg:qualifier">
+				<xsl:text> </xsl:text>
+				<xsl:apply-templates select="."/>
+			</xsl:for-each>
 		</span>
 	</xsl:template>
 
@@ -138,16 +141,8 @@
 					name="stopAtPosition"
 					select="count(./rpg:attackbonus[1]/preceding-sibling::node())"/>
 			<xsl:variable name="forXlink">
-				<xsl:for-each
-						select="./node()[count(preceding-sibling::node()) &lt;= $stopAtPosition]">
-					<xsl:choose>
-						<xsl:when test="self::text()">
-							<xsl:copy-of select="."/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="inline.charseq"/>
-						</xsl:otherwise>
-					</xsl:choose>
+				<xsl:for-each select="./node()[position() &lt; $stopAtPosition]">
+					<xsl:call-template name="trpg:text-or-inline"/>
 				</xsl:for-each>
 			</xsl:variable>
 			<xsl:call-template name="simple.xlink">
@@ -155,17 +150,10 @@
 						name="content"
 						select="$forXlink"/>
 			</xsl:call-template>
-			<xsl:apply-templates select="./rpg:attackbonus"/>
-			<xsl:if test="./rpg:qualifier[preceding-sibling::*[1][self::rpg:attackbonus]]">
+			<xsl:for-each select="./rpg:attackbonus | ./rpg:onhit | ./rpg:qualifier">
 				<xsl:text> </xsl:text>
-				<xsl:apply-templates select="./rpg:qualifier[1]"/>
-			</xsl:if>
-			<xsl:text> </xsl:text>
-			<xsl:apply-templates select="./rpg:onhit"/>
-			<xsl:if test="./rpg:qualifier[preceding-sibling::rpg:onhit]">
-				<xsl:text> </xsl:text>
-				<xsl:apply-templates select="./rpg:qualifier[2]"/>
-			</xsl:if>
+				<xsl:apply-templates select="."/>
+			</xsl:for-each>
 		</span>
 	</xsl:template>
 
@@ -175,16 +163,7 @@
 			<xsl:call-template name="id.attribute"/>
 			<span class="{local-name(.)}-body">
 				<xsl:variable name="forXlink">
-					<xsl:for-each select="./node()[not(self::rpg:qualifier)]">
-						<xsl:choose>
-							<xsl:when test="self::text()">
-								<xsl:copy-of select="."/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="inline.charseq"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:for-each>
+					<xsl:call-template name="trpg:no-qualifier-xlink-content"/>
 				</xsl:variable>
 				<xsl:call-template name="simple.xlink">
 					<xsl:with-param
@@ -206,21 +185,10 @@
 	</xsl:template>
 
 	<xsl:template match="rpg:sr">
-		<span>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
-			<span class="{local-name(.)}-title">
-				<xsl:call-template name="gentext">
-					<xsl:with-param
-							name="key"
-							select="local-name(.)"/>
-				</xsl:call-template>
-			</span>
-			<xsl:text> </xsl:text>
-			<span class="{local-name(.)}-amount">
-				<xsl:value-of select="@amount"/>
-			</span>
-		</span>
+		<xsl:call-template name="trpg:gentext-container-span">
+			<xsl:with-param name="key" select="local-name(.)"/>
+			<xsl:with-param name="contents" select="@amount"/>
+		</xsl:call-template>
 	</xsl:template>
 
 	<xsl:template match="rpg:resistance">
@@ -233,16 +201,7 @@
 			<xsl:text> </xsl:text>
 			<span class="{local-name(.)}-body">
 				<xsl:variable name="forXlink">
-					<xsl:for-each select="./node()">
-						<xsl:choose>
-							<xsl:when test="self::text()">
-								<xsl:copy-of select="."/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="inline.charseq"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:for-each>
+					<xsl:call-template name="trpg:everything-xlink-content"/>
 				</xsl:variable>
 				<xsl:call-template name="simple.xlink">
 					<xsl:with-param
@@ -265,16 +224,7 @@
 				<xsl:choose>
 					<xsl:when test="./node()">
 						<xsl:variable name="forXlink">
-							<xsl:for-each select="./node()">
-								<xsl:choose>
-									<xsl:when test="self::text()">
-										<xsl:copy-of select="."/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:call-template name="inline.charseq"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:for-each>
+							<xsl:call-template name="trpg:everything-xlink-content"/>
 						</xsl:variable>
 						<xsl:call-template name="simple.xlink">
 							<xsl:with-param
@@ -296,16 +246,7 @@
 			<xsl:call-template name="id.attribute"/>
 			<span class="{local-name(.)}-body">
 				<xsl:variable name="forXlink">
-					<xsl:for-each select="./node()[not(self::rpg:qualifier)]">
-						<xsl:choose>
-							<xsl:when test="self::text()">
-								<xsl:copy-of select="."/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="inline.charseq"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:for-each>
+					<xsl:call-template name="trpg:no-qualifier-xlink-content"/>
 				</xsl:variable>
 				<xsl:call-template name="simple.xlink">
 					<xsl:with-param
@@ -379,26 +320,21 @@
 				</xsl:if>
 				<xsl:text>)</xsl:text>
 			</xsl:if>
-			<xsl:if test="./rpg:fasthealing | ./rpg:regeneration">
-				<xsl:text>; </xsl:text>
-				<xsl:for-each select="./rpg:fasthealing | ./rpg:regeneration">
-					<xsl:if test="position() != 1">
+			<xsl:for-each select="./rpg:fasthealing | ./rpg:regeneration">
+				<xsl:choose>
+					<xsl:when test="position() != 1">
 						<xsl:text>, </xsl:text>
-					</xsl:if>
-					<xsl:apply-templates select="."/>
-				</xsl:for-each>
-			</xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>; </xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:apply-templates select="."/>
+			</xsl:for-each>
 		</span>
 	</xsl:template>
 
 	<xsl:template match="rpg:ac">
-		<xsl:variable
-				name="hasTouch"
-				select="./rpg:touch"/>
-		<xsl:variable
-				name="hasFlatFoot"
-				select="./rpg:flatfoot"/>
-
 		<span>
 			<xsl:call-template name="common.html.attributes"/>
 			<xsl:call-template name="id.attribute"/>
@@ -411,14 +347,10 @@
 			</span>
 			<xsl:text> </xsl:text>
 			<xsl:apply-templates select="./rpg:rating"/>
-			<xsl:if test="$hasTouch">
+			<xsl:for-each select="./rpg:touch | ./rpg:flatfoot">
 				<xsl:text>, </xsl:text>
-				<xsl:apply-templates select="./rpg:touch"/>
-			</xsl:if>
-			<xsl:if test="$hasFlatFoot">
-				<xsl:text>, </xsl:text>
-				<xsl:apply-templates select="./rpg:flatfoot"/>
-			</xsl:if>
+				<xsl:apply-templates select="."/>
+			</xsl:for-each>
 
 			<xsl:variable
 					name="body"
@@ -428,14 +360,7 @@
 				<span class="{local-name(.)}-body">
 					<xsl:variable name="forXlink">
 						<xsl:for-each select="$body">
-							<xsl:choose>
-								<xsl:when test="self::text()">
-									<xsl:copy-of select="."/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:call-template name="inline.charseq"/>
-								</xsl:otherwise>
-							</xsl:choose>
+							<xsl:call-template name="trpg:text-or-inline"/>
 						</xsl:for-each>
 					</xsl:variable>
 					<xsl:call-template name="simple.xlink">
@@ -447,13 +372,25 @@
 				</span>
 			</xsl:if>
 
-			<xsl:if test="./rpg:modifier">
-				<xsl:text>(</xsl:text>
-				<xsl:apply-templates select="./rpg:modifier">
-					<xsl:with-param name="separator" select="', '"/>
-				</xsl:apply-templates>
-				<xsl:text>)</xsl:text>
-			</xsl:if>
+			<xsl:apply-templates select="./rpg:modifierbreakdown">
+				<xsl:with-param name="separator" select="', '"/>
+			</xsl:apply-templates>
+		</span>
+	</xsl:template>
+
+	<xsl:template match="rpg:modifierbreakdown">
+		<xsl:param
+				name="separator"
+				select="''"/>
+
+		<span>
+			<xsl:call-template name="common.html.attributes"/>
+			<xsl:call-template name="id.attribute"/>
+			<xsl:text>(</xsl:text>
+			<xsl:apply-templates select="./rpg:modifier">
+				<xsl:with-param name="separator" select="$separator"/>
+			</xsl:apply-templates>
+			<xsl:text>)</xsl:text>
 		</span>
 	</xsl:template>
 
@@ -473,14 +410,7 @@
 				<span class="{local-name(.)}-body">
 					<xsl:variable name="forXlink">
 						<xsl:for-each select="$body">
-							<xsl:choose>
-								<xsl:when test="self::text()">
-									<xsl:copy-of select="."/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:call-template name="inline.charseq"/>
-								</xsl:otherwise>
-							</xsl:choose>
+							<xsl:call-template name="trpg:text-or-inline"/>
 						</xsl:for-each>
 					</xsl:variable>
 					<xsl:call-template name="simple.xlink">
@@ -505,17 +435,17 @@
 	</xsl:template>
 
 	<xsl:template match="rpg:dc">
-		<span>
-			<xsl:call-template name="common.html.attributes"/>
-			<xsl:call-template name="id.attribute"/>
-			<xsl:call-template name="gentext">
-				<xsl:with-param
-						name="key"
-						select="local-name(.)"/>
-			</xsl:call-template>
-			<xsl:text> </xsl:text>
-			<xsl:value-of select="@rating"/>
-		</span>
+		<xsl:call-template name="trpg:gentext-container-span">
+			<xsl:with-param name="key" select="local-name(.)"/>
+			<xsl:with-param name="contents" select="@rating"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template match="rpg:casterlevel">
+		<xsl:call-template name="trpg:gentext-container-span">
+			<xsl:with-param name="key" select="local-name(.)"/>
+			<xsl:with-param name="contents" select="@level"/>
+		</xsl:call-template>
 	</xsl:template>
 
 	<xsl:template match="rpg:aura">
@@ -537,14 +467,7 @@
 			<span class="{local-name(.)}-body">
 				<xsl:variable name="forXlink">
 					<xsl:for-each select="./node()[not(self::rpg:dc)]">
-						<xsl:choose>
-							<xsl:when test="self::text()">
-								<xsl:copy-of select="."/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="inline.charseq"/>
-							</xsl:otherwise>
-						</xsl:choose>
+						<xsl:call-template name="trpg:text-or-inline"/>
 					</xsl:for-each>
 				</xsl:variable>
 				<xsl:call-template name="simple.xlink">
@@ -591,16 +514,52 @@
 			<xsl:call-template name="id.attribute"/>
 			<span class="{local-name(.)}-body">
 				<xsl:variable name="forXlink">
-					<xsl:for-each select="./node()[not(self::rpg:qualifier)]">
-						<xsl:choose>
-							<xsl:when test="self::text()">
-								<xsl:copy-of select="."/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="inline.charseq"/>
-							</xsl:otherwise>
-						</xsl:choose>
+					<xsl:for-each select="./node()[not(self::rpg:qualifier) and not(self::rpg:modifierbreakdown)]">
+						<xsl:call-template name="trpg:text-or-inline"/>
 					</xsl:for-each>
+				</xsl:variable>
+				<xsl:call-template name="simple.xlink">
+					<xsl:with-param
+							name="content"
+							select="$forXlink"/>
+				</xsl:call-template>
+			</span>
+			<xsl:if test="$hasModifier">
+				<xsl:text> </xsl:text>
+				<span class="{local-name(.)}-modifier">
+					<xsl:value-of select="@modifier"/>
+				</span>
+			</xsl:if>
+			<xsl:for-each select="./rpg:modifierbreakdown | ./rpg:qualifier">
+				<xsl:text> </xsl:text>
+				<xsl:apply-templates select="."/>
+			</xsl:for-each>
+		</span>
+		<xsl:if test="following-sibling::*[1][self::rpg:skill]">
+			<xsl:value-of select="$separator"/>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="rpg:concentration">
+		<xsl:param
+				name="separator"
+				select="''"/>
+
+		<xsl:variable
+				name="hasModifier"
+				select="@modifier"/>
+
+		<span>
+			<xsl:call-template name="common.html.attributes"/>
+			<xsl:call-template name="id.attribute"/>
+			<span class="{local-name(.)}-body">
+				<xsl:variable name="forXlink">
+					<xsl:call-template name="gentext">
+						<xsl:with-param
+								name="key"
+								select="local-name(.)"/>
+					</xsl:call-template>
+					<xsl:call-template name="trpg:no-qualifier-xlink-content"/>
 				</xsl:variable>
 				<xsl:call-template name="simple.xlink">
 					<xsl:with-param
