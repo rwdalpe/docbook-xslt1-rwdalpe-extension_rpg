@@ -257,7 +257,8 @@
 		| rpg:offenses/rpg:creaturedimensions
 		| rpg:offenses/rpg:specialattacks
 		| rpg:statistics
-		| rpg:statistics/rpg:creaturefeats | rpg:statistics/rpg:creatureskills"
+		| rpg:statistics/rpg:creaturefeats | rpg:statistics/rpg:creatureskills
+		| rpg:statistics/rpg:creaturelanguages | rpg:statistics/rpg:specialqualities"
 
 			mode="creature">
 		<xsl:call-template name="trpg:gentext-container-div">
