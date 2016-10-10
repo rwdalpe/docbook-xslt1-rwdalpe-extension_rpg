@@ -67,7 +67,7 @@
 
 	<xsl:template name="trpg:named-container-div">
 		<xsl:param name="name"/>
-		<xsl:param name="contents" as="node()*"/>
+		<xsl:param name="contents"/>
 
 		<div>
 			<xsl:call-template name="common.html.attributes"/>
